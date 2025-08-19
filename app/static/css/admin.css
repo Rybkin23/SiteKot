@@ -1,0 +1,173 @@
+/* Основные стили контейнера */
+.admin-container {
+    padding: 100px 0 50px;
+    min-height: calc(100vh - 160px);
+}
+
+/* Карточки */
+.card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    margin-bottom: 30px;
+}
+
+.card h2 {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 22px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Формы */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 15px;
+    transition: border-color 0.3s;
+}
+
+.form-control:focus {
+    border-color: #4a6fa5;
+    outline: none;
+}
+
+textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.btn-delete:hover {
+    background-color: #c1121f;
+}
+
+/* Таблицы */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.projects-table, .messages-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.projects-table th, 
+.projects-table td,
+.messages-table th,
+.messages-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.projects-table th,
+.messages-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #333;
+}
+
+.projects-table tr:hover,
+.messages-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Специфичные стили для таблицы проектов */
+.projects-table img {
+    max-width: 100px;
+    height: auto;
+    border-radius: 4px;
+}
+
+/* Специфичные стили для таблицы сообщений */
+.messages-table {
+    table-layout: fixed;
+}
+
+.messages-table td:nth-child(1) { width: 15%; } /* Имя */
+.messages-table td:nth-child(2) { width: 20%; } /* Email */
+.messages-table td:nth-child(3) { width: 50%; } /* Сообщение */
+.messages-table td:nth-child(4) { width: 15%; } /* Дата */
+
+.messages-table td:nth-child(4) {
+    white-space: nowrap;
+    color: #666;
+    font-family: monospace;
+}
+
+/* Алерты */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-size: 15px;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Адаптивность */
+@media (max-width: 992px) {
+    .admin-container {
+        padding: 80px 0 30px;
+    }
+    
+    .card {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .messages-table td:nth-child(1),
+    .messages-table td:nth-child(2),
+    .messages-table td:nth-child(4) {
+        width: auto;
+    }
+    
+    .messages-table td:nth-child(3) {
+        display: none; /* Скрываем длинные сообщения на мобильных */
+    }
+    
+    .projects-table td:nth-child(3) {
+        display: none; /* Скрываем изображения на мобильных */
+    }
+}
+
+@media (max-width: 576px) {
+    .admin-container {
+        padding: 70px 0 20px;
+    }
+    
+    .card {
+        padding: 15px;
+    }
+    
+    .btn {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+    
+    .projects-table td:nth-child(2) {
+        display: none; /* Скрываем описание на маленьких экранах */
+    }
+}

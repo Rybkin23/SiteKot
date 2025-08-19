@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}Админ-панель | DesignPS{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/admin.css">
+{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="container">
+        <!-- Вывод ошибок -->
+        {% if error %}
+        <div class="alert alert-danger">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <!-- Форма добавления проекта -->
+        <div class="card">
+            <h2>Добавить проект</h2>
+            <form method="POST" action="/admin/projects" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="title">Название проекта</label>
+                    <input type="text" id="title" name="title" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Описание</label>
+                    <textarea id="description" name="description" class="form-control" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="image">Изображение</label>
+                    <input type="file" id="image" name="image" accept="image/*" class="form-control" required>
+                    <small>Допустимые форматы: JPG, PNG, WEBP</small>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Добавить проект</button>
+            </form>
+        </div>
+
+        <!-- Список проектов -->
+        <div class="card">
+            <h2>Текущие проекты</h2>
+            {% if projects %}
+            <div class="table-responsive">
+                <table class="projects-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Название</th>
+                            <th>Изображение</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for project in projects %}
+                        <tr>
+                            <td>{{ project.id }}</td>
+                            <td>{{ project.title }}</td>
+                            <td>
+                                {% if project.image_url %}
+                                <img src="/static/{{ project.image_url }}" width="100" alt="{{ project.title }}">
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="/admin/delete_project/{{ project.id }}" 
+                                   class="btn btn-delete"
+                                   onclick="return confirm('Удалить этот проект?')">
+                                    Удалить
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p>Нет добавленных проектов</p>
+            {% endif %}
+        </div>
+
+        <!-- Список сообщений -->
+        <div class="card">
+            <h2>Сообщения от клиентов</h2>
+            {% if contacts %}
+            <table class="messages-table">
+                <thead>
+                    <tr>
+                        <th>Имя</th>
+                        <th>Email</th>
+                        <th>Сообщение</th>
+                        <th>Дата</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for contact in contacts %}
+                    <tr>
+                        <td>{{ contact.name }}</td>
+                        <td>{{ contact.email }}</td>
+                        <td>{{ contact.message }}</td>
+                        <td>
+                            {% if contact.created_at %}
+                                {{ contact.created_at.astimezone().strftime('%d.%m.%Y %H:%M') }}
+                            {% else %}
+                                Нет данных
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>Нет сообщений</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Подтверждение удаления
+document.querySelectorAll('.btn-delete').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        if (!confirm('Вы уверены, что хотите удалить этот проект?')) {
+            e.preventDefault();
+        }
+    });
+});
+
+// Показ превью изображения перед загрузкой
+document.getElementById('image').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const preview = document.getElementById('image-preview');
+            if (!preview) {
+                const img = document.createElement('img');
+                img.id = 'image-preview';
+                img.src = event.target.result;
+                img.style.maxWidth = '200px';
+                img.style.marginTop = '10px';
+                e.target.parentNode.appendChild(img);
+            } else {
+                preview.src = event.target.result;
+            }
+        };
+        reader.readAsDataURL(file);
+    }
+});
+</script>
+{% endblock %}
