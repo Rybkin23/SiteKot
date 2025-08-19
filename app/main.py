@@ -1,25 +1,20 @@
-import secrets
 import shutil
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Annotated
 from urllib.parse import quote
 
-from fastapi import Depends, FastAPI, File, Form, HTTPException, Request, UploadFile
+from fastapi import Depends, FastAPI, File, Form, Request, UploadFile
 from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 
 from . import crud, models, schemas
+from .auth import get_current_admin
 from .config.template_config import setup_templates
 from .database import SessionLocal, engine
 
 # Создание приложения
 app = FastAPI()
-
-# Настройка аутентификации
-security = HTTPBasic()
 
 # Настройка базы данных
 models.Base.metadata.create_all(bind=engine)
@@ -39,24 +34,6 @@ def get_db():
         yield db
     finally:
         db.close()
-
-
-# Настройка аутентификации
-security = HTTPBasic()
-
-
-def get_current_admin(credentials: Annotated[HTTPBasicCredentials, Depends(security)]):
-    correct_username = secrets.compare_digest(credentials.username, "admin")
-    correct_password = secrets.compare_digest(
-        credentials.password, "admin"
-    )  # Измените на свой пароль
-    if not (correct_username and correct_password):
-        raise HTTPException(
-            status_code=401,
-            detail="Неверные учетные данные",
-            headers={"WWW-Authenticate": "Basic"},
-        )
-    return credentials.username
 
 
 # Роут для создания проектов
