@@ -87,12 +87,11 @@ async def admin_panel(
             "request": request,
             "projects": projects,
             "contacts": contacts,
-            "admin": True,  # Передаем флаг админа в шаблон
+            "admin": True,
         },
     )
 
 
-# Роут фронтенда
 @app.post("/submit_contact", response_class=RedirectResponse)
 async def create_contact(
     request: Request,

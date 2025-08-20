@@ -5,7 +5,8 @@
     --dark: #333;
     --light: #f8f9fa;
     --danger: #e63946;
-    --success: #2a9d8f;
+    --success: #4CAF50;
+    --warning: #ff9800;
     --text-color: #333;
     --text-light: #777;
 }
@@ -32,7 +33,6 @@ body {
     margin: 0 auto;
     padding: 0 15px;
 }
-
 
 /* Шапка */
 header {
@@ -68,17 +68,17 @@ header {
 }
 
 /* Навигация */
-nav ul {
+.main-nav ul {
     display: flex;
     list-style: none;
 }
 
-nav ul li {
+.main-nav li {
     margin-left: 30px;
     position: relative;
 }
 
-nav ul li a {
+.main-nav a {
     text-decoration: none;
     color: var(--dark);
     font-weight: 500;
@@ -86,12 +86,12 @@ nav ul li a {
     padding: 5px 0;
 }
 
-nav ul li a:hover,
-nav ul li a.active {
+.main-nav a:hover,
+.main-nav a.active {
     color: var(--primary);
 }
 
-nav ul li a::after {
+.main-nav a::after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -102,121 +102,250 @@ nav ul li a::after {
     transition: width 0.3s;
 }
 
-nav ul li a:hover::after,
-nav ul li a.active::after {
+.main-nav a:hover::after,
+.main-nav a.active::after {
     width: 100%;
 }
 
-/* Флеш-сообщения */
-.flash-message {
-    position: fixed;
-    top: 80px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 15px 25px;
-    background: var(--success);
-    color: white;
-    border-radius: 4px;
-    z-index: 1000;
-    animation: fadeInOut 3s ease-in-out forwards;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+/* Мобильное меню */
+.mobile-menu-button {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 1001;
 }
 
-@keyframes fadeInOut {
-    0% { opacity: 0; top: 50px; }
-    10% { opacity: 1; top: 80px; }
-    90% { opacity: 1; top: 80px; }
-    100% { opacity: 0; top: 50px; visibility: hidden; }
+.mobile-menu-button span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background: var(--dark);
+    margin: 5px 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Основное содержимое */
-main {
-    flex: 1;
-    padding-top: 80px; /* Для фиксированной шапки */
+/* Состояния бургер-иконки */
+.mobile-menu-button.active span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
 }
 
-/* Адаптивность */
-@media (max-width: 768px) {
-    .header-inner {
-        flex-direction: column;
-        padding: 15px 0;
-    }
-    
-    nav ul {
-        margin-top: 15px;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    
-    nav ul li {
-        margin: 0 15px 10px;
-    }
-    
-    .flash-message {
-        width: 90%;
-        text-align: center;
-    }
+.mobile-menu-button.active span:nth-child(2) {
+    opacity: 0;
 }
 
-@media (max-width: 480px) {
-    nav ul {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    nav ul li {
-        margin: 5px 0;
-    }
+.mobile-menu-button.active span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
 }
 
-.flash-message {
-    position: fixed;
-    top: 80px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 15px 25px;
-    background: #4CAF50;
-    color: white;
-    border-radius: 4px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-    z-index: 1000;
-    animation: fadeIn 0.3s ease-out;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; top: 50px; }
-    to { opacity: 1; top: 80px; }
-}
-
-/* Для ошибок можно добавить дополнительный класс */
+/* Flash-сообщения */
+.flash-success,
 .flash-error {
-    background: #f44336;
-}
-
-.flash-success {
     position: fixed;
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
     padding: 12px 24px;
-    background: #4CAF50;
     color: white;
     border-radius: 4px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.2);
     z-index: 1000;
-    transition: opacity 0.3s;
+    animation: slideInDown 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.flash-success {
+    background: var(--success);
 }
 
 .flash-error {
-    background: #f44336;
+    background: var(--danger);
 }
 
-/* Анимация появления */
-@keyframes slideIn {
-    from { top: -50px; opacity: 0; }
-    to { top: 20px; opacity: 1; }
+/* Анимации */
+@keyframes slideInDown {
+    from {
+        transform: translate3d(-50%, -100%, 0);
+        opacity: 0;
+    }
+    to {
+        transform: translate3d(-50%, 0, 0);
+        opacity: 1;
+    }
 }
 
-.flash-success, .flash-error {
-    animation: slideIn 0.5s ease-out forwards;
+/* Основное содержимое */
+main {
+    flex: 1;
+    padding-top: 80px;
+}
+
+/* Подвал */
+footer {
+    background: #333;
+    color: #fff;
+    padding: 50px 0 20px;
+    margin-top: auto;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.footer-column h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #ff5a5f;
+}
+
+.footer-column ul {
+    list-style: none;
+}
+
+.footer-column ul li {
+    margin-bottom: 10px;
+}
+
+.footer-column ul li a {
+    color: #ddd;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-column ul li a:hover {
+    color: #ff5a5f;
+}
+
+.copyright {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #444;
+    color: #aaa;
+    font-size: 14px;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .header-inner {
+        flex-direction: row;
+        padding: 15px 0;
+    }
+    
+    .mobile-menu-button {
+        display: block !important;
+    }
+    
+    .main-nav {
+        position: fixed;
+        top: 80px;
+        left: -100%;
+        width: 100%;
+        height: calc(100vh - 80px);
+        background: white;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        transition: left 0.4s ease-in-out;
+        z-index: 1000;
+        overflow-y: auto;
+        padding: 20px 0;
+    }
+    
+    .main-nav.active {
+        left: 0 !important;
+    }
+    
+    .main-nav ul {
+        flex-direction: column;
+        padding: 20px;
+        margin-top: 0;
+        gap: 10px;
+    }
+    
+    .main-nav li {
+        margin: 15px 0;
+        margin-left: 0;
+    }
+    
+    .main-nav a {
+        font-size: 18px;
+        display: block;
+        padding: 15px 20px;
+        border-radius: 8px;
+        transition: background-color 0.3s;
+    }
+    
+    .main-nav a:hover {
+        background-color: #f5f5f5;
+    }
+    
+    .flash-success,
+    .flash-error {
+        width: 90%;
+        text-align: center;
+    }
+
+    /* Затемнение фона при открытом меню */
+    body.menu-open {
+        overflow: hidden;
+    }
+
+    body.menu-open::after {
+        content: '';
+        position: fixed;
+        top: 80px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        opacity: 0;
+        animation: fadeIn 0.3s ease forwards;
+    }
+
+    @keyframes fadeIn {
+        to { opacity: 1; }
+    }
+}
+
+@media (max-width: 480px) {
+    .header-inner {
+        padding: 10px 0;
+    }
+    
+    .main-nav ul {
+        padding: 15px;
+    }
+    
+    .main-nav li {
+        margin: 12px 0;
+    }
+    
+    .flash-success,
+    .flash-error {
+        font-size: 14px;
+        padding: 10px 15px;
+    }
+}
+
+/* Для очень маленьких экранов */
+@media (max-width: 360px) {
+    .header-inner {
+        padding: 10px 0;
+    }
+    
+    .mobile-menu-button {
+        padding: 8px;
+    }
+    
+    .mobile-menu-button span {
+        width: 20px;
+        height: 2px;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
 }
