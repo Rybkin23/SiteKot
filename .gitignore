@@ -1,4 +1,4 @@
-/.env
+.env*
 /.flake8
 /pyproject.toml
 /sql_app.db
@@ -6,3 +6,4 @@
 __pycache__/
 *.jpg
 design-ps-test.html
+logs/

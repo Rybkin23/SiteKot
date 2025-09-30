@@ -1,45 +1,51 @@
-from sqlalchemy.orm import Session
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from . import models, schemas
 
 
-def get_project(db: Session, project_id: int):
-    return db.query(models.Project).filter(models.Project.id == project_id).first()
+async def get_project(db: AsyncSession, project_id: int):
+    result = await db.execute(
+        select(models.Project).filter(models.Project.id == project_id)
+    )
+    return result.scalar_one_or_none()
 
 
-def get_projects(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Project).offset(skip).limit(limit).all()
+async def get_projects(db: AsyncSession, skip: int = 0, limit: int = 100):
+    result = await db.execute(select(models.Project).offset(skip).limit(limit))
+    return result.scalars().all()
 
 
-def create_project(db: Session, project: schemas.ProjectCreate):
+async def create_project(db: AsyncSession, project: schemas.ProjectCreate):
     db_project = models.Project(**project.model_dump())
     db.add(db_project)
-    db.commit()
-    db.refresh(db_project)
+    await db.commit()
+    await db.refresh(db_project)
     return db_project
 
 
-def delete_project(db: Session, project_id: int):
-    project = db.query(models.Project).filter(models.Project.id == project_id).first()
+async def delete_project(db: AsyncSession, project_id: int):
+    project = await get_project(db, project_id)
     if project:
-        db.delete(project)
-        db.commit()
-    return project
+        await db.delete(project)
+        await db.commit()
+        return project
+    return None
 
 
-def get_contacts(db: Session, skip: int = 0, limit: int = 100):
-    return (
-        db.query(models.Contact)
+async def get_contacts(db: AsyncSession, skip: int = 0, limit: int = 100):
+    result = await db.execute(
+        select(models.Contact)
         .order_by(models.Contact.created_at.desc())
         .offset(skip)
         .limit(limit)
-        .all()
     )
+    return result.scalars().all()
 
 
-def create_contact(db: Session, contact: schemas.ContactCreate):
+async def create_contact(db: AsyncSession, contact: schemas.ContactCreate):
     db_contact = models.Contact(**contact.model_dump())
     db.add(db_contact)
-    db.commit()
-    db.refresh(db_contact)
+    await db.commit()
+    await db.refresh(db_contact)
     return db_contact

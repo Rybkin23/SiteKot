@@ -11,6 +11,9 @@ class ProjectBase(BaseModel):
 class ProjectCreate(ProjectBase):
     image_url: str
 
+    class Config:
+        from_attributes = True
+
 
 class Project(ProjectBase):
     id: int

@@ -12,9 +12,9 @@ class Project(Base):
     __tablename__ = "projects"
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String(100), index=True)
-    description = Column(Text)
-    image_url = Column(String(200))  # Путь к изображению относительно /static/
+    title = Column(String(255), nullable=False)
+    description = Column(Text, nullable=True)
+    image_url = Column(String(500), nullable=True)
 
 
 class Contact(Base):

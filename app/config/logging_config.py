@@ -13,7 +13,9 @@ def configure_logging():
     log_dir.mkdir(exist_ok=True)
     log_file = log_dir / "site.log"
 
-    rotating_handler = RotatingFileHandler(log_file, maxBytes=10**6, backupCount=5)
+    rotating_handler = RotatingFileHandler(
+        log_file, maxBytes=10**6, backupCount=5, encoding="utf-8"
+    )
 
     logging.basicConfig(
         datefmt=DT_FORMAT,

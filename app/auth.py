@@ -8,7 +8,6 @@ from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
 load_dotenv()
 
-# Настройка аутентификации
 security = HTTPBasic()
 
 
